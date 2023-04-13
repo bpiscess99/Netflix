@@ -10,6 +10,8 @@ import {BiChevronDown} from 'react-icons/bi';
 import { firebaseAuth } from '../utils/firbase-config';
 import { onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { removeFromLikedMovies } from '../store';
 
 
 const Card = React.memo(({movieData, isLiked = false}) => {
@@ -21,6 +23,8 @@ const Card = React.memo(({movieData, isLiked = false}) => {
     if (currentUser) setEmail(currentUser.email);
     else navigate("/login");
   });
+  
+  const dispatch = useDispatch()
 
   const addToList = async () => {
     try {
@@ -69,7 +73,7 @@ const Card = React.memo(({movieData, isLiked = false}) => {
                 <RiThumbDownFill title='Dislike'/>
                 {
                   isLiked ? (
-                    <BsCheck title='Remove From List'/>) : (
+                    <BsCheck title='Remove From List' onClick={() => dispatch(removeFromLikedMovies({movieId: movieData.id, email}))} />) : (
                     <AiOutlinePlus title='Add to my list' onClick={() => addToList()}/> 
                   )}
                   
